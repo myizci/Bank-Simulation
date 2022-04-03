@@ -1,7 +1,7 @@
-package com.example.banksimulation.service;
+package com.cydeo.banksimulation.service;
 
-import com.example.banksimulation.entity.Account;
-import com.example.banksimulation.entity.Transaction;
+import com.cydeo.banksimulation.model.Account;
+import com.cydeo.banksimulation.model.Transaction;
 
 import java.math.BigDecimal;
 import java.util.Date;

@@ -1,16 +1,16 @@
-package com.example.banksimulation.service.implementation;
+package com.cydeo.banksimulation.service.implementation;
 
-import com.example.banksimulation.entity.Account;
-import com.example.banksimulation.entity.Transaction;
-import com.example.banksimulation.enums.AccountType;
-import com.example.banksimulation.exception.AccountOwnerException;
-import com.example.banksimulation.exception.BadRequestException;
+import com.cydeo.banksimulation.model.Account;
+import com.cydeo.banksimulation.model.Transaction;
+import com.cydeo.banksimulation.enums.AccountType;
+import com.cydeo.banksimulation.exception.AccountOwnerException;
+import com.cydeo.banksimulation.exception.BadRequestException;
 
-import com.example.banksimulation.exception.BalanceNotSufficientException;
-import com.example.banksimulation.exception.UnderConstructionException;
-import com.example.banksimulation.repository.AccountRepository;
-import com.example.banksimulation.repository.TransactionRepository;
-import com.example.banksimulation.service.TransactionService;
+import com.cydeo.banksimulation.exception.BalanceNotSufficientException;
+import com.cydeo.banksimulation.exception.UnderConstructionException;
+import com.cydeo.banksimulation.repository.AccountRepository;
+import com.cydeo.banksimulation.repository.TransactionRepository;
+import com.cydeo.banksimulation.service.TransactionService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 

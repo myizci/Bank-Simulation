@@ -1,9 +1,9 @@
-package com.example.banksimulation.service.implementation;
+package com.cydeo.banksimulation.service.implementation;
 
-import com.example.banksimulation.entity.Account;
-import com.example.banksimulation.enums.AccountType;
-import com.example.banksimulation.repository.AccountRepository;
-import com.example.banksimulation.service.AccountService;
+import com.cydeo.banksimulation.model.Account;
+import com.cydeo.banksimulation.enums.AccountType;
+import com.cydeo.banksimulation.repository.AccountRepository;
+import com.cydeo.banksimulation.service.AccountService;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -13,6 +13,7 @@ import java.util.UUID;
 
 @Component
 public class AccountServiceImpl implements AccountService {
+
 
     AccountRepository accountRepository;
 
@@ -27,13 +28,18 @@ public class AccountServiceImpl implements AccountService {
                 .userId(userId)
                 .accountType(accountType)
                 .balance(balance)
-                .creationData(creationDate)
+                .creationDate(creationDate)
                 .build();
         return accountRepository.save(account);
     }
 
     @Override
     public List<Account> listAllAccount() {
-        return  accountRepository.findAll();
+        return accountRepository.findAll();
+    }
+
+    @Override
+    public void deleteAccount(UUID account) {
+        accountRepository.deleteAccount();
     }
 }

@@ -1,4 +1,4 @@
-package com.example.banksimulation.enums;
+package com.cydeo.banksimulation.enums;
 
 public enum AccountType {
     CHECKINGS,

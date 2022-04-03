@@ -1,7 +1,7 @@
-package com.example.banksimulation.repository;
+package com.cydeo.banksimulation.repository;
 
-import com.example.banksimulation.entity.Account;
-import com.example.banksimulation.exception.RecordNotFoundException;
+import com.cydeo.banksimulation.model.Account;
+import com.cydeo.banksimulation.exception.RecordNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -27,5 +27,9 @@ public class AccountRepository {
        return accountList.stream().
                filter(account -> account.getId().equals(accountId))
                .findAny().orElseThrow(()-> new RecordNotFoundException("This account is not in the database"));
+    }
+
+    public void deleteAccount() {
+
     }
 }

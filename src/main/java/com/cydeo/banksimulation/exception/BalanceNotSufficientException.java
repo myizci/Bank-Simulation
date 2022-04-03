@@ -1,4 +1,4 @@
-package com.example.banksimulation.exception;
+package com.cydeo.banksimulation.exception;
 
 public class BalanceNotSufficientException extends RuntimeException {
     public BalanceNotSufficientException(String s) {
