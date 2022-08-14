@@ -1,5 +1,6 @@
 package com.cydeo.banksimulation.controller;
 
+import com.cydeo.banksimulation.dto.AccountDTO;
 import com.cydeo.banksimulation.enums.AccountType;
 import com.cydeo.banksimulation.model.Account;
 import com.cydeo.banksimulation.service.AccountService;
@@ -29,7 +30,7 @@ public class AccountController {
 
     @GetMapping("/create-form")
     public String getCreateForm(Model model) {
-        model.addAttribute("account", Account.builder().build());
+        model.addAttribute("accountDTO", new AccountDTO());
         model.addAttribute("accountTypes", AccountType.values());
         return "account/create-account";
 
