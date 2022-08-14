@@ -5,8 +5,10 @@ import com.cydeo.banksimulation.model.Account;
 import com.cydeo.banksimulation.service.AccountService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Date;
 import java.util.UUID;
 
@@ -34,8 +36,14 @@ public class AccountController {
     }
 
     @PostMapping("/create")
-    public String createAccount(@ModelAttribute("account") Account account, Model model){
-       accountService.createNewAccount(account.getBalance(),
+    public String createAccount(@Valid @ModelAttribute("account") Account account, BindingResult bindingResult, Model model){
+
+        if(bindingResult.hasErrors()){
+            model.addAttribute("accountTypes", AccountType.values());
+            return "account/create-account";
+        }
+
+        accountService.createNewAccount(account.getBalance(),
                new Date(),
                account.getAccountType(),
                account.getUserId());
@@ -44,8 +52,8 @@ public class AccountController {
        return "redirect:/index";
     }
 
-    @GetMapping("/delete")
-    public String deleteUser(@PathVariable("id") UUID id, Model model){
+    @GetMapping("/delete/{id}")
+    public String deleteUser(@PathVariable("id") UUID id){
         accountService.deleteAccount(id);
         return "redirect:/index";
 

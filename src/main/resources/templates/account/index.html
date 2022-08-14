@@ -36,8 +36,8 @@
                         <td th:text="${account.getBalance()}"></td>
                         <td  th:text="${account.getAccountType()}"></td>
                         <td  th:text="${account.getCreationDate()}"></td>
-                        <td><a href="">Delete</a></td>
-                        <td><a href="">Account Transaction</a></td>
+                        <td><a th:href="@{/delete/{id}(id=${account.id})}">Delete</a></td>
+                        <td><a th:href="@{/transaction/{id} (id=${account.id})}">Account Transaction</a></td>
                     </tr>
                     </tbody>
                 </table>

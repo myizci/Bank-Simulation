@@ -14,4 +14,5 @@ public interface AccountService {
 
     void deleteAccount(UUID account);
 
+    Account retrieveById(UUID account);
 }
