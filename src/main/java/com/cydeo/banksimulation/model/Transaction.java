@@ -1,20 +1,31 @@
 package com.cydeo.banksimulation.model;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
+import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.UUID;
 
-@Data
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "transactions")
 @Builder
 public class Transaction {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+
     @NotNull
-    private UUID sender;
+    @ManyToOne(fetch= FetchType.LAZY)
+    private Account sender;
     @NotNull
-    private UUID receiver;
+    @ManyToOne(fetch= FetchType.LAZY)
+    private Account receiver;
     @NotNull
     @Positive
     private BigDecimal amount;
@@ -22,6 +33,7 @@ public class Transaction {
     @Size(min = 2, max = 250)
     @Pattern(regexp = "^[a-zA-Z0-9]*$")
     private String message;
+    @Column(columnDefinition = "DATE")
     private Date creationDate;
 
 

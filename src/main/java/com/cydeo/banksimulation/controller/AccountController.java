@@ -37,24 +37,21 @@ public class AccountController {
     }
 
     @PostMapping("/create")
-    public String createAccount(@Valid @ModelAttribute("account") Account account, BindingResult bindingResult, Model model){
+    public String createAccount(@Valid @ModelAttribute("accountDTO") AccountDTO accountDTO, BindingResult bindingResult, Model model){
 
         if(bindingResult.hasErrors()){
             model.addAttribute("accountTypes", AccountType.values());
             return "account/create-account";
         }
 
-        accountService.createNewAccount(account.getBalance(),
-               new Date(),
-               account.getAccountType(),
-               account.getUserId());
+        accountService.createNewAccount(accountDTO);
         model.addAttribute("accountList",accountService.listAllAccount());
 
        return "redirect:/index";
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteUser(@PathVariable("id") UUID id){
+    public String deleteUser(@PathVariable("id") Long id){
         accountService.deleteAccount(id);
         return "redirect:/index";
 

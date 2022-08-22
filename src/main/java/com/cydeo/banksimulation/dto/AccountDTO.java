@@ -1,5 +1,6 @@
 package com.cydeo.banksimulation.dto;
 
+import com.cydeo.banksimulation.enums.AccountStatus;
 import com.cydeo.banksimulation.enums.AccountType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,8 +19,12 @@ import java.util.Date;
 @NoArgsConstructor
 public class AccountDTO {
     private Long id;
+
     @NotNull
     private AccountType accountType;
+    @NotNull
+    private AccountStatus accountStatus;
+
     private Date creationDate;
 
     @NotNull

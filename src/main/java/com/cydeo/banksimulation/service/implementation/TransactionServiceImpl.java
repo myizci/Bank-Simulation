@@ -1,5 +1,8 @@
 package com.cydeo.banksimulation.service.implementation;
 
+import com.cydeo.banksimulation.dto.AccountDTO;
+import com.cydeo.banksimulation.dto.TransactionDTO;
+import com.cydeo.banksimulation.mapper.TransactionMapper;
 import com.cydeo.banksimulation.model.Account;
 import com.cydeo.banksimulation.model.Transaction;
 import com.cydeo.banksimulation.enums.AccountType;
@@ -10,6 +13,7 @@ import com.cydeo.banksimulation.exception.BalanceNotSufficientException;
 import com.cydeo.banksimulation.exception.UnderConstructionException;
 import com.cydeo.banksimulation.repository.AccountRepository;
 import com.cydeo.banksimulation.repository.TransactionRepository;
+import com.cydeo.banksimulation.service.AccountService;
 import com.cydeo.banksimulation.service.TransactionService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -24,51 +28,54 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Value("${under_construction}")
     private boolean underConstruction;
-    AccountRepository accountRepository;
-    TransactionRepository transactionRepository;
+    private final AccountService accountService;
+    private final TransactionRepository transactionRepository;
+    private final TransactionMapper transactionMapper;
 
-    public TransactionServiceImpl(AccountRepository accountRepository, TransactionRepository transactionRepository) {
-        this.accountRepository = accountRepository;
+    public TransactionServiceImpl(AccountService accountService, TransactionRepository transactionRepository, TransactionMapper transactionMapper) {
+        this.accountService = accountService;
         this.transactionRepository = transactionRepository;
+        this.transactionMapper = transactionMapper;
     }
 
     @Override
-    public Transaction makeTransfer(BigDecimal amount,
-                                    Date creationDate,
-                                    Account sender,
-                                    Account receiver,
-                                    String message) {
+    public TransactionDTO makeTransfer(BigDecimal amount,
+                                       Date creationDate,
+                                       AccountDTO sender,
+                                       AccountDTO receiver,
+                                       String message) {
         if (!underConstruction) {
             checkAccountOwner(sender, receiver);
             validateAccounts(sender, receiver);
             executeBalanceAndUpdateIfRequired(amount, sender, receiver);
+            TransactionDTO transactionDTO = new TransactionDTO(sender,receiver, amount,message,creationDate);
 
-            return transactionRepository.save(Transaction.builder()
-                    .amount(amount)
-                    .creationDate(creationDate)
-                    .sender(sender.getId())
-                    .receiver(receiver.getId())
-                    .message(message).build());
+            transactionRepository.save(transactionMapper.convertToEntity(transactionDTO));
+
+            return transactionDTO;
         }else{
-            throw new UnderConstructionException("Make transfer is not possible for now. Please try again later");
+            throw new UnderConstructionException("Make transfer is not possible for now, please try again later");
         }
+
     }
 
-    private void executeBalanceAndUpdateIfRequired(BigDecimal amount, Account sender, Account receiver) {
+    private void executeBalanceAndUpdateIfRequired(BigDecimal amount, AccountDTO sender, AccountDTO receiver) {
         if(checkSenderBalance(sender,amount)){
             sender.setBalance(sender.getBalance().subtract(amount));
             receiver.setBalance(receiver.getBalance().add(amount));
+
+
         }else{
             throw new BalanceNotSufficientException("Balance is not enough for this transaction");
         }
 
     }
 
-    private boolean checkSenderBalance(Account sender, BigDecimal amount) {
+    private boolean checkSenderBalance(AccountDTO sender, BigDecimal amount) {
         return sender.getBalance().subtract(amount).compareTo(BigDecimal.ZERO)>0;
     }
 
-    private void validateAccounts(Account sender, Account receiver) {
+    private void validateAccounts(AccountDTO sender, AccountDTO receiver) {
         if(sender==null || receiver==null){
             throw new BadRequestException("Sender or receiver cannot be null");
         }
@@ -87,7 +94,7 @@ public class TransactionServiceImpl implements TransactionService {
         return accountRepository.findById(accountId);
     }
 
-    private void checkAccountOwner(Account sender, Account receiver) {
+    private void checkAccountOwner(AccountDTO sender, AccountDTO receiver) {
         if((sender.getAccountType().equals(AccountType.SAVINGS) ||
                 receiver.getAccountType().equals(AccountType.SAVINGS))
                 && !sender.getUserId().equals(receiver.getUserId())){

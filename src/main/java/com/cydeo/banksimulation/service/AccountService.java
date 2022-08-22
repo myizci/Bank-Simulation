@@ -1,5 +1,6 @@
 package com.cydeo.banksimulation.service;
 
+import com.cydeo.banksimulation.dto.AccountDTO;
 import com.cydeo.banksimulation.model.Account;
 import com.cydeo.banksimulation.enums.AccountType;
 
@@ -9,10 +10,11 @@ import java.util.List;
 import java.util.UUID;
 
 public interface AccountService {
-    Account createNewAccount(BigDecimal balance, Date creationDate, AccountType accountType, Long userId);
-    List<Account> listAllAccount();
+    Account createNewAccount(AccountDTO accountDTO);
+    List<AccountDTO> listAllAccount();
+    List<AccountDTO> listAllActiveAccount();
 
-    void deleteAccount(UUID account);
+    void deleteAccount(Long account);
 
-    Account retrieveById(UUID account);
+    AccountDTO retrieveById(Long account);
 }
