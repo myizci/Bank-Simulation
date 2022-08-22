@@ -1,13 +1,17 @@
 package com.cydeo.banksimulation.service.implementation;
 
 import com.cydeo.banksimulation.dto.AccountDTO;
+import com.cydeo.banksimulation.dto.OtpDTO;
 import com.cydeo.banksimulation.enums.AccountStatus;
+import com.cydeo.banksimulation.exception.AccountStatusInvalidException;
+import com.cydeo.banksimulation.exception.BalanceNotSufficientException;
 import com.cydeo.banksimulation.mapper.AccountMapper;
 import com.cydeo.banksimulation.entity.Account;
 import com.cydeo.banksimulation.repository.AccountRepository;
 import com.cydeo.banksimulation.service.AccountService;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,7 +29,15 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account createNewAccount(AccountDTO accountDTO) {
+    public OtpDTO createNewAccount(AccountDTO accountDTO) {
+
+        if(accountDTO.getBalance().compareTo(BigDecimal.ZERO)<=0 || accountDTO.getBalance()==null){
+            throw new BalanceNotSufficientException("Initial balance needs to be greater that zero");
+        }
+
+        if(accountDTO.getAccountStatus().equals(AccountStatus.DELETED)){
+            throw new AccountStatusInvalidException("Account status cannot be deleted");
+        }
 
         accountDTO.setCreationDate(new Date());
         accountDTO.setAccountStatus(AccountStatus.ACTIVE);
