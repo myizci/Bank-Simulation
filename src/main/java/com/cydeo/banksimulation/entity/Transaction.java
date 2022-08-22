@@ -1,12 +1,10 @@
-package com.cydeo.banksimulation.model;
+package com.cydeo.banksimulation.entity;
 
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.UUID;
 
 @Entity
 @Getter
@@ -19,20 +17,19 @@ public class Transaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
-    @NotNull
     @ManyToOne(fetch= FetchType.LAZY)
     private Account sender;
-    @NotNull
+
     @ManyToOne(fetch= FetchType.LAZY)
     private Account receiver;
-    @NotNull
-    @Positive
+
     private BigDecimal amount;
-    @NotEmpty
-    @Size(min = 2, max = 250)
-    @Pattern(regexp = "^[a-zA-Z0-9]*$")
+
+
     private String message;
+
     @Column(columnDefinition = "DATE")
     private Date creationDate;
 

@@ -1,7 +1,7 @@
 package com.cydeo.banksimulation.mapper;
 
 import com.cydeo.banksimulation.dto.TransactionDTO;
-import com.cydeo.banksimulation.model.Transaction;
+import com.cydeo.banksimulation.entity.Transaction;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 

@@ -1,7 +1,7 @@
 package com.cydeo.banksimulation.controller;
 
-import com.cydeo.banksimulation.model.Account;
-import com.cydeo.banksimulation.model.Transaction;
+import com.cydeo.banksimulation.dto.AccountDTO;
+import com.cydeo.banksimulation.dto.TransactionDTO;
 import com.cydeo.banksimulation.service.AccountService;
 import com.cydeo.banksimulation.service.TransactionService;
 import org.springframework.stereotype.Controller;
@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Date;
-import java.util.UUID;
 
 @Controller
 public class TransactionController {
@@ -27,14 +26,14 @@ public class TransactionController {
     @GetMapping("/make-transfer")
     public String retrieveTransactionForm(Model model){
         model.addAttribute("accounts",accountService.listAllAccount());
-        model.addAttribute("transaction", Transaction.builder().build());
+        model.addAttribute("transactionDTO", new TransactionDTO());
         model.addAttribute("lastTransactionList",transactionService.retrieveLastTransaction());
 
         return "/transaction/make-transfer";
     }
 
     @PostMapping("/transfer")
-    public String makeTransfer(@Valid @ModelAttribute("transaction")Transaction transaction, BindingResult bindingResult, Model model){
+    public String makeTransfer(@Valid @ModelAttribute("transactionDTO")TransactionDTO transactionDTO, BindingResult bindingResult, Model model){
 
 
         if(bindingResult.hasErrors()){
@@ -42,16 +41,16 @@ public class TransactionController {
             return "/transaction/make-transfer";
         }
 
-         Account receiver = accountService.retrieveById(transaction.getReceiver());
-         Account sender = accountService.retrieveById(transaction.getSender());
+         AccountDTO receiver = transactionDTO.getReceiver();
+         AccountDTO sender = transactionDTO.getSender();
 
-         transactionService.makeTransfer(transaction.getAmount(),new Date(),sender,receiver,transaction.getMessage());
+         transactionService.makeTransfer(transactionDTO.getAmount(),new Date(),sender,receiver,transactionDTO.getMessage());
 
         return "redirect:/make-transfer";
     }
 
     @GetMapping("/transaction/{id}")
-    public String transactionDetailById(@PathVariable("id") UUID id, Model model){
+    public String transactionDetailById(@PathVariable("id") Long id, Model model){
 
         model.addAttribute("transactionList", transactionService.findTransactionListById(id));
 
