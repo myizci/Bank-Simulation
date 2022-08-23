@@ -22,6 +22,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Component
 public class TransactionServiceImpl implements TransactionService {
@@ -90,8 +91,8 @@ public class TransactionServiceImpl implements TransactionService {
 
     }
 
-    private Account findAccountById(UUID accountId) {
-        return accountRepository.findById(accountId);
+    private AccountDTO findAccountById(Long accountId) {
+        return accountService.retrieveById(accountId);
     }
 
     private void checkAccountOwner(AccountDTO sender, AccountDTO receiver) {
@@ -103,17 +104,20 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public List<Transaction> findAll() {
-        return transactionRepository.findAll();
+    public List<TransactionDTO> findAll() {
+
+         List<Transaction> transactionList = transactionRepository.findAll();
+         return transactionList.stream().map(transactionMapper::convertToDTO).collect(Collectors.toList());
     }
 
     @Override
-    public List<Transaction> retrieveLastTransaction() {
-        return transactionRepository.retrieveLastTransactions();
+    public List<TransactionDTO> retrieveLastTransaction() {
+
+        return transactionRepository.findLastTenTransactions().stream().map(transactionMapper::convertToDTO).collect(Collectors.toList());
     }
 
     @Override
-    public List<Transaction> findTransactionListById(UUID id) {
-        return transactionRepository.findTransactionListById(id);
+    public List<TransactionDTO> findTransactionListById(Long id) {
+        return transactionRepository.findTransactionListById(id).stream().map(transactionMapper::convertToDTO).collect(Collectors.toList());
     }
 }

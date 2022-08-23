@@ -33,7 +33,7 @@ public class AccountServiceImpl implements AccountService {
 
         accountDTO.setCreationDate(new Date());
         accountDTO.setAccountStatus(AccountStatus.ACTIVE);
-        accountRepository.save(accountMapper.covertToEntity(accountDTO));
+        return accountRepository.save(accountMapper.covertToEntity(accountDTO));
 
     }
 
