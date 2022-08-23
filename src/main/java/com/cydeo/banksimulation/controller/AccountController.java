@@ -34,7 +34,7 @@ public class AccountController {
     }
 
     @PostMapping("/create")
-    public String createAccount( @ModelAttribute("account") AccountDTO accountDTO, BindingResult bindingResult, Model model){
+    public String createAccount(@Valid @ModelAttribute("account") AccountDTO accountDTO, BindingResult bindingResult, Model model){
 
         if(bindingResult.hasErrors()){
             model.addAttribute("accountTypes", AccountType.values());

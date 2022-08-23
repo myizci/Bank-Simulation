@@ -22,7 +22,7 @@ public class AccountDTO {
 
     @NotNull
     private AccountType accountType;
-    @NotNull
+
     private AccountStatus accountStatus;
 
     private Date creationDate;
