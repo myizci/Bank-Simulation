@@ -9,23 +9,27 @@ import com.cydeo.banksimulation.mapper.AccountMapper;
 import com.cydeo.banksimulation.entity.Account;
 import com.cydeo.banksimulation.repository.AccountRepository;
 import com.cydeo.banksimulation.service.AccountService;
+import com.cydeo.banksimulation.service.OtpService;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Component
+@Service
 public class AccountServiceImpl implements AccountService {
 
 
     private final AccountRepository accountRepository;
     private final AccountMapper accountMapper;
+    private final OtpService otpService;
 
-    public AccountServiceImpl(AccountRepository accountRepository, AccountMapper accountMapper) {
+    public AccountServiceImpl(AccountRepository accountRepository, AccountMapper accountMapper, OtpService otpService) {
         this.accountRepository = accountRepository;
         this.accountMapper = accountMapper;
+        this.otpService = otpService;
     }
 
     @Override
